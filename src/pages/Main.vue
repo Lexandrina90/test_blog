@@ -27,13 +27,16 @@ export default {
   },
   methods: {
     removePost(post) {
-      this.posts = this.posts.filter(p => p.id !== post.id)
+      this.posts = this.posts.filter(p => p.id !== post.id);
+      localStorage.setItem('posts', JSON.stringify(this.posts));
     },
     async fetchPosts() {
       try {
         this.isPostsLoading = true;
           const response = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10');
-          this.posts = [...this.posts, ...response.data]
+          this.posts = [...this.posts, ...response.data];
+
+          localStorage.setItem('posts', JSON.stringify(this.posts));
       } catch (e) {
         alert('Error')
       } finally {
@@ -42,7 +45,17 @@ export default {
     },
   },
   mounted() {
-    this.fetchPosts();
+    const storedPosts = localStorage.getItem('posts');
+    if (storedPosts) {
+      this.posts = JSON.parse(storedPosts);
+    } else {
+      this.fetchPosts();
+    }
+  },
+  computed: {
+    sortedAndSearchedPosts() {
+      return this.sortedPosts.filter(post => post.title.toLowerCase().includes(this.searchQuery.toLowerCase()))
+    }
   },
 }
 </script>

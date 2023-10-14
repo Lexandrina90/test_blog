@@ -1,4 +1,5 @@
 import Main from '@/pages/Main';
+import PostIdPage from '@/pages/PostIdPage';
 import { createRouter, createWebHashHistory } from 'vue-router';
 
 const routes = [
@@ -6,6 +7,10 @@ const routes = [
     path: '/',
     component: Main
   },
+  {
+    path: '/posts/:id',
+    component: PostIdPage
+  }
 ]
 
 const router = createRouter({
