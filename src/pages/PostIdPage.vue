@@ -12,6 +12,10 @@
         Ut voluptatibus libero quam tenetur in! Similique laudantium corporis quidem alias nisi suscipit, facilis, accusantium tempora pariatur aut, repellat numquam quod consectetur rerum quis ipsum eos architecto? Eaque, vero sed?
         Minus, aut. Officiis ex corrupti provident facilis, ipsa necessitatibus quasi neque alias quidem saepe in illo obcaecati dolores vero doloribus dolore repudiandae, nihil nobis rerum ut sequi amet nesciunt! Sit?
       </div>
+      <span class="post__date">
+        <icon-date/>
+        {{ displayedDate }}
+      </span>
     </div>
     <div v-else>
       Loading...
@@ -22,23 +26,59 @@
         @remove="removeComment"
       />
     </div>
+    <my-button
+        @click="showDialog"
+        style="margin-top: 10px;"
+      >
+        Add Comment
+      </my-button>
+    <my-dialog v-model:show="dialogVisible">
+      <comment-form @create="createComment"/>
+    </my-dialog>
   </div>
 </template>
 
 <script>
 import CommentList from '@/components/CommentList.vue';
 import axios from 'axios';
+import IconDate from '@/components/icons/IconDate.vue';
+import CommentForm from '@/components/CommentForm.vue';
 export default {
-  components: { CommentList },
+  components: { CommentList, IconDate, CommentForm },
   data() {
     return {
       post: [], 
       comments: [],
+      dialogVisible: false,
     }
   },
+  computed: {
+    storedDate() {
+      const storedDate = localStorage.getItem('myDate');
+      if (storedDate) {
+        return new Date(JSON.parse(storedDate));
+      }
+      return null;
+    },
+    displayedDate() {
+      const date = this.storedDate || new Date();
+      const day = date.getDate();
+      const month = date.getMonth() + 1;
+      const year = date.getFullYear();
+      return `${day < 10 ? "0" : ""}${day}.${month < 10 ? "0" : ""}${month}.${year}`;
+    },
+  },
+
   methods: {
     removeComment(comment) {
       this.comments = this.comments.filter(c => c.id !== comment.id)
+    },
+    createComment(comment) {
+      this.comments.push(comment);
+      this.dialogVisible = false;
+    },
+    showDialog() {
+      this.dialogVisible = true;
     },
     async fetchComments() {
       try {
@@ -47,6 +87,11 @@ export default {
       } catch (e) {
         alert('Error')
       }
+    },
+    saveDateToLocalStorage() {
+      const date = this.storedDate || new Date();
+      const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+      localStorage.setItem('myDate', JSON.stringify(formattedDate));
     },
   },
   mounted() {
@@ -57,10 +102,21 @@ export default {
     this.post = posts.find(post => post.id === postId);
 
     this.fetchComments();    
-  }
+  },
+  created() {
+    this.saveDateToLocalStorage();
+  },
 }
 </script>
 
 <style scoped>
+
+.post__date {
+  position: absolute;
+  display: flex;
+  gap: 4px;
+  right: 40px;
+  color: teal;
+}
 
 </style>

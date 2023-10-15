@@ -2,12 +2,12 @@
   <div class="comment">
     <div class="comment__body">
       <div class="comment__img">
-        <icon-user />
+        <icon-comment-user />
       </div>
       <div class="comment__content">
         <div><strong>Name:</strong> {{ comment.name }}</div>
         <div><strong>E-mail:</strong> {{ comment.email }}</div>
-        <div><strong>Comment:</strong> {{ comment.body }}</div>
+        <div style="margin-top: 10px;"> {{ comment.body }}</div>
         <!-- <span class="comments__date">{{ formattedDate }}</span> -->
       </div>
     </div>
@@ -20,10 +20,10 @@
 </template>
 
 <script>
+import IconCommentUser from './icons/IconCommentUser.vue';
 import IconDelete from "./icons/IconDelete.vue";
-import IconUser from "./icons/IconUser.vue";
 export default {
-  components: { IconDelete, IconUser },
+  components: { IconDelete, IconCommentUser },
   props: {
     comment: {
       type: Object,
@@ -63,6 +63,9 @@ export default {
 }
 .comment__content {
   align-self: center;
+}
+.comment__img {
+  margin-right: 10px;
 }
 /* .post__date {
   color: teal;

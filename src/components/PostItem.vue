@@ -11,7 +11,7 @@
         <div><strong>Title:</strong> {{ post.title }}</div>
         <div><strong>Description:</strong> {{ post.body }}</div>
         <div class="post__comments">
-          <span class="post__date">{{ formattedDate }}</span>
+          <!-- <span class="post__date">{{ displayedDate }}</span> -->
           <span style="color: gray">{{ comments }}</span>
           <icon-comment />
         </div>
@@ -42,17 +42,32 @@ export default {
       comments: 0,
     };
   },
-  computed: {
-    formattedDate() {
-      const date = new Date();
-      const day = date.getDate();
-      const month = date.getMonth() + 1;
-      const year = date.getFullYear();
-      return `${day < 10 ? "0" : ""}${day}.${
-        month < 10 ? "0" : ""
-      }${month}.${year}`;
-    },
-  },
+  // computed: {
+  //   storedDate() {
+  //     const storedDate = localStorage.getItem('myDate');
+  //     if (storedDate) {
+  //       return new Date(JSON.parse(storedDate));
+  //     }
+  //     return null;
+  //   },
+  //   displayedDate() {
+  //     const date = this.storedDate || new Date();
+  //     const day = date.getDate();
+  //     const month = date.getMonth() + 1;
+  //     const year = date.getFullYear();
+  //     return `${day < 10 ? "0" : ""}${day}.${month < 10 ? "0" : ""}${month}.${year}`;
+  //   },
+  // },
+  // methods: {
+  //   saveDateToLocalStorage() {
+  //     const date = this.storedDate || new Date();
+  //     const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+  //     localStorage.setItem('myDate', JSON.stringify(formattedDate));
+  //   },
+  // },
+  // created() {
+  //   this.saveDateToLocalStorage();
+  // },
 };
 </script>
 
