@@ -35,7 +35,7 @@ export default {
           {
             placeholder: 'Text',
             name: 'body',
-            as: 'input',
+            as: 'textarea',
             rules: Yup.string().required()
           }
         ]
@@ -45,15 +45,4 @@ export default {
 };
 </script>
 
-<style scoped>
-form {
-  display: flex;
-  flex-direction: column;
-}
-textarea {
-  width: 100%;
-  border: 1px solid teal;
-  padding: 10px 15px;
-  margin-top: 15px;
-}
-</style>
+

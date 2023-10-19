@@ -1,5 +1,5 @@
 <template>
-  <Form @submit="createComment">
+  <Form @submit="createComment" class="form">
     <div v-for="{ as, name, children, ...attrs } in schema.fields" :key="name">
       <Field
         :as="as"
@@ -19,16 +19,9 @@
           </component>
         </template>
       </Field>
-      <ErrorMessage :name="name" />
+      <ErrorMessage :name="name" class="error-msg"/>
     </div>
-    <button style="align-self: flex-end; margin-top: 15px"> Add Comment</button>
-    <!-- <my-button
-      type="button"
-      style="align-self: flex-end; margin-top: 15px"
-      @click="createComment"
-    >
-      Add Comment
-    </my-button> -->
+    <button style="align-self: flex-end; margin-top: 15px">Add Comment</button>
   </Form>
 </template>
 <script>
@@ -70,3 +63,31 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.form {
+  display: flex;
+  flex-direction: column;
+}
+input {
+  width: 100%;
+  border: 1px solid teal;
+  padding: 10px 15px;
+  margin-top: 15px;
+}
+textarea {
+  width: 100%;
+  border: 1px solid teal;
+  padding: 10px 15px;
+  margin-top: 15px;
+}
+button {
+  padding: 10px 15px;
+  background: none;
+  color: teal;
+  border: 1px solid teal;
+}
+.error-msg {
+  color: rgb(185, 51, 10);
+}
+</style>
