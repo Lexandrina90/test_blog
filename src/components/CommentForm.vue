@@ -1,55 +1,48 @@
 <template>
-  <form @submit.prevent>
-    <h4>Add comment</h4>
-    <my-input
-      v-focus
-      v-model="comment.name"
-      type="text"
-      placeholder="Name"
-      novalidate="true"
-    />
-    <my-input
-      v-model="comment.email"
-      type="email"
-      placeholder="E-mail"
-    />
-    <textarea
-      v-model="comment.body"
-      type="text"
-      placeholder="Text"
-    />
-    <my-button 
-      style="align-self: flex-end; margin-top: 15px;"
-      @click="createComment"
-    >
-      Add Comment
-    </my-button>
-  </form>
+   <DynamicForm :schema="formSchema"/>
 </template>
 
 <script>
+import * as Yup from 'yup';
+import DynamicForm from './DynamicForm.vue';
+
 export default {
+  components: {
+    DynamicForm
+  },
   data() {
     return {
-      comment: {
+      comment:{
         name: '',
         email: '',
         body: '',
+        id: null,
+      },
+      formSchema: {
+        fields: [
+          {
+            placeholder: 'Name',
+            name: 'name',
+            as: 'input',
+            rules: Yup.string().required(),
+          },
+          {
+            placeholder: 'Email',
+            name: 'email',
+            as: 'input',
+            rules: Yup.string().email(),
+          },
+          {
+            placeholder: 'Text',
+            name: 'body',
+            as: 'input',
+            rules: Yup.string().required()
+          }
+        ]
       }
     }
   },
-  methods: {
-    createComment() {
-      this.comment.id = Date.now(),
-      this.$emit('create', this.comment);
-      this.comment = {
-        name: '',
-        email: '',
-        body: ''
-      }
-    }
-  }
-}
+};
 </script>
 
 <style scoped>
