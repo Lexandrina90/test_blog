@@ -24,7 +24,7 @@ export default {
             placeholder: 'Name',
             name: 'name',
             as: 'input',
-            rules: Yup.string().required(),
+            rules: Yup.string().required().max(50),
           },
           {
             placeholder: 'Email',
@@ -36,7 +36,7 @@ export default {
             placeholder: 'Text',
             name: 'body',
             as: 'textarea',
-            rules: Yup.string().required()
+            rules: Yup.string().required().max(255)
           }
         ]
       }
