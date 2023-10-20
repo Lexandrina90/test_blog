@@ -14,7 +14,7 @@
           @blur="saveAndExitEditMode"
           @input="editField($event, 'title')"
           style="outline: none"
-          :class="{ 'editable': isEdit }"
+          :class="{ editable: isEdit }"
         >
           {{ post.title }}
         </div>
@@ -27,7 +27,7 @@
           @blur="saveAndExitEditMode"
           @input="editField($event, 'body')"
           style="outline: none"
-          :class="{ 'editable': isEdit }"
+          :class="{ editable: isEdit }"
         >
           {{ post.body }}
         </div>
@@ -40,7 +40,7 @@
           @blur="saveAndExitEditMode"
           @input="editField($event, 'text')"
           style="outline: none"
-          :class="{ 'editable': isEdit }"
+          :class="{ editable: isEdit }"
         >
           {{ post.text }}
         </div>
@@ -82,25 +82,26 @@ export default {
         body: "",
         text: "",
       },
+      isUpdate: false,
     };
   },
   computed: {
     postDate() {
-      const savedDates = localStorage.getItem("datesMap");
-      const dates = JSON.parse(savedDates);
-      const postId = Number(this.$route.params.id);
-      const storedDate = dates[postId - 1];
-      if (storedDate) {
-        const date = new Date(storedDate);
-        const day = date.getDate();
-        const month = date.getMonth() + 1;
-        const year = date.getFullYear();
-        return `${day < 10 ? "0" : ""}${day}.${
-          month < 10 ? "0" : ""
-        }${month}.${year}`;
-      } else {
-        return "No date available";
-      }
+        const savedDates = localStorage.getItem("datesMap");
+        const dates = JSON.parse(savedDates);
+        const postId = Number(this.$route.params.id);
+        const storedDate = dates[postId - 1];
+        if (storedDate) {
+          const date = new Date(storedDate);
+          const day = date.getDate();
+          const month = date.getMonth() + 1;
+          const year = date.getFullYear();
+          return `${day < 10 ? "0" : ""}${day}.${
+            month < 10 ? "0" : ""
+          }${month}.${year}`;
+        } else {
+          return "No date available";
+        }
     },
   },
 
@@ -127,15 +128,11 @@ export default {
     },
     editPost() {
       this.isEdit = true;
+      console.log(this.isUpdate);
     },
     editField(event, fieldName) {
       this.editedPost[fieldName] = event.target.innerText;
-      console.log(this.post[fieldName]);
-      console.log(this.editedPost[fieldName]);
-      // if (this.post[fieldName] !== editedPost[fieldName]) {
-      //   this.isUpdate = true;
-      // }
-      // console.log(this.isUpdate)
+      this.isUpdate = true;
 
       const savedPosts = localStorage.getItem("posts");
       const posts = JSON.parse(savedPosts);
@@ -149,7 +146,17 @@ export default {
     },
     saveAndExitEditMode() {
       this.isEdit = false;
-    },
+      
+      if (this.isUpdate) {
+        const currentDate = new Date().toISOString().split('T')[0];
+        const savedDates = JSON.parse(localStorage.getItem("datesMap"));
+        const postId = Number(this.$route.params.id);
+        savedDates[postId - 1] = currentDate;
+        localStorage.setItem("datesMap", JSON.stringify(savedDates));
+
+        this.isUpdate = false; 
+      }
+    }
   },
   mounted() {
     const savedPosts = localStorage.getItem("posts");

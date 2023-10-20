@@ -49,12 +49,6 @@ export default {
     };
   },
   computed: {
-    // storedDate() {
-    //   if (this.datesArray.length > 0) {
-    //     return new Date(this.datesArray[this.datesArray.length - 1]);
-    //   }
-    //   return null;
-    // },
     displayedDate() {
       const postId = this.post.id;
       if (this.datesMap[postId]) {
@@ -69,8 +63,6 @@ export default {
       const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
       const datesMap = this.datesMap || [];
       datesMap.push(formattedDate);
-      // const newId = Object.keys(datesMap).length + 1;
-      // datesMap[newId] = formattedDate;
       localStorage.setItem("datesMap", JSON.stringify(datesMap));
     },
   },
