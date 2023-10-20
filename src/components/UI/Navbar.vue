@@ -1,15 +1,6 @@
 <template>
   <div class="navbar">
     <div @click="$router.push('/')" class="navbar__link">Home</div>
-    <!-- <div class="navbar__btns">
-      <my-button @click="$router.push('/')"> Home </my-button>
-      <my-button 
-        style="margin-left: 20px;" 
-        @click="$router.push('/about')"
-      > 
-        О сайте
-      </my-button>
-    </div> -->
   </div>
 </template>
 
@@ -34,6 +25,7 @@ export default {
 .navbar__link {
   color: teal;
   font-weight: bold;
+  padding-left: 5px;
 }
 .navbar__link:hover {
   color: rgb(36, 187, 187);

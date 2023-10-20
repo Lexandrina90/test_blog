@@ -10,10 +10,14 @@
       <div class="post__content">
         <div><strong>Title:</strong> {{ post.title }}</div>
         <div><strong>Description:</strong> {{ post.body }}</div>
-        <div class="post__comments">
-          <!-- <span class="post__date">{{ displayedDate }}</span> -->
-          <span style="color: gray">{{ comments }}</span>
-          <icon-comment />
+        <div class="post__footer">
+          <span class="post__date">
+            <icon-date/>
+            {{ displayedDate }}</span>
+          <span class="post__comments" style="color: gray">
+            {{ comments }}
+            <icon-comment />
+          </span>
         </div>
       </div>
     </div>
@@ -29,8 +33,9 @@
 import IconComment from "./icons/IconComment.vue";
 import IconDelete from "./icons/IconDelete.vue";
 import IconUser from "./icons/IconUser.vue";
+import IconDate from '@/components/icons/IconDate.vue';
 export default {
-  components: { IconDelete, IconUser, IconComment },
+  components: { IconDelete, IconUser, IconComment, IconDate },
   props: {
     post: {
       type: Object,
@@ -40,34 +45,43 @@ export default {
   data() {
     return {
       comments: 0,
+      datesMap:[],
     };
   },
-  // computed: {
-  //   storedDate() {
-  //     const storedDate = localStorage.getItem('myDate');
-  //     if (storedDate) {
-  //       return new Date(JSON.parse(storedDate));
-  //     }
-  //     return null;
-  //   },
-  //   displayedDate() {
-  //     const date = this.storedDate || new Date();
-  //     const day = date.getDate();
-  //     const month = date.getMonth() + 1;
-  //     const year = date.getFullYear();
-  //     return `${day < 10 ? "0" : ""}${day}.${month < 10 ? "0" : ""}${month}.${year}`;
-  //   },
-  // },
-  // methods: {
-  //   saveDateToLocalStorage() {
-  //     const date = this.storedDate || new Date();
-  //     const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
-  //     localStorage.setItem('myDate', JSON.stringify(formattedDate));
-  //   },
-  // },
-  // created() {
-  //   this.saveDateToLocalStorage();
-  // },
+  computed: {
+    // storedDate() {
+    //   if (this.datesArray.length > 0) {
+    //     return new Date(this.datesArray[this.datesArray.length - 1]);
+    //   }
+    //   return null;
+    // },
+    displayedDate() {
+      const postId = this.post.id;
+      if (this.datesMap[postId]) {
+        return this.datesMap[postId];
+      }
+      return "";
+    },
+  },
+  methods: {
+    saveDateToLocalStorage() {
+      const date = new Date();
+      const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+      const datesMap = this.datesMap || [];
+      datesMap.push(formattedDate);
+      // const newId = Object.keys(datesMap).length + 1;
+      // datesMap[newId] = formattedDate;
+      localStorage.setItem("datesMap", JSON.stringify(datesMap));
+    },
+  },
+  created() {
+    const storedDatesMap = localStorage.getItem("datesMap");
+    if (storedDatesMap) {
+      this.datesMap = JSON.parse(storedDatesMap);
+    }
+    this.saveDateToLocalStorage();
+  },
+
 };
 </script>
 
@@ -87,14 +101,22 @@ export default {
 .post__content {
   align-self: center;
 }
+.post__footer {
+  margin-top: 4px;
+  display: flex;
+  gap: 8px;
+}
+.post__date {
+  display: flex;
+  gap: 4px;
+  color: teal;
+  margin-right: 8px;
+}
 .post__comments {
   display: flex;
   gap: 4px;
 }
-.post__date {
-  color: teal;
-  margin-right: 8px;
-}
+
 .post__btns {
   display: flex;
 }
