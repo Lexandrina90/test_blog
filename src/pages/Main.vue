@@ -31,7 +31,7 @@ export default {
       selectedSort: "",
       dialogVisible: false,
       datesMap: {},
-      comments:[],
+      comments: [],
     };
   },
   methods: {
@@ -66,35 +66,25 @@ export default {
           Minus, aut. Officiis ex corrupti provident facilis, ipsa necessitatibus quasi neque alias quidem saepe in illo obcaecati dolores vero doloribus dolore repudiandae, nihil nobis rerum ut sequi amet nesciunt! Sit?`;
 
           this.datesMap[post.id] = currentDate;
-          this.fetchCommentsForPost(post.id);
         });
+        for (let postId = 1; postId <= 10; postId++) {
+          const response = await axios.get(
+            `https://jsonplaceholder.typicode.com/comments?postId=${postId}`
+          );
+          this.comments[postId] = response.data;
+        }
+
         this.posts = [...this.posts, ...response.data];
 
         localStorage.setItem("posts", JSON.stringify(this.posts));
         localStorage.setItem("datesMap", JSON.stringify(this.datesMap));
+        localStorage.setItem("comments", JSON.stringify(this.comments));
       } catch (e) {
         alert("Error");
       } finally {
         this.isPostsLoading = false;
       }
     },
-    async fetchCommentsForPost(postId) {
-  try {
-    const savedComments = JSON.parse(localStorage.getItem("comments")) || {};
-
-    for (let postId = 1; postId <= 10; postId ++) {
-     
-        const response = await axios.get(
-          `https://jsonplaceholder.typicode.com/comments?postId=${postId}`
-        );
-        savedComments[postId] = response.data;
-        localStorage.setItem("comments", JSON.stringify(savedComments));
-      
-    }
-  } catch (e) {
-    alert("Error");
-  }
-},
   },
   mounted() {
     const storedPosts = localStorage.getItem("posts");

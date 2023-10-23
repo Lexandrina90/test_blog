@@ -13,7 +13,7 @@
             {{ displayedDate }}</span
           >
           <span class="post__comments" style="color: gray">
-            {{ commentsCount}}
+            {{ commentsCount }}
             <icon-comment />
           </span>
         </div>
@@ -60,22 +60,18 @@ export default {
       return "";
     },
     commentsCount() {
-    const postId = this.post.id;
-    const storedComments = localStorage.getItem('comments');
-    
-    if (storedComments) {
-      const comments = JSON.parse(storedComments);
-      const postComments = comments[postId] || [];
-      return postComments.length;
-    }
-    
-    return 0; 
-  },
-  },
-  methods: {
-    saveDateToLocalStorage() {
+      const postId = this.post.id;
+      const storedComments = localStorage.getItem("comments");
+
+      if (storedComments) {
+        const comments = JSON.parse(storedComments);
+        const postComments = comments[postId] || [];
+        return postComments.length;
+      }
+      return 0;
     },
   },
+  methods: {},
   mounted() {
     const storedDates = localStorage.getItem("datesMap");
     if (storedDates) {
@@ -91,7 +87,6 @@ export default {
       this.datesMap[postId] = currentDate;
       localStorage.setItem("datesMap", JSON.stringify(this.datesMap));
     }
-
   },
 };
 </script>
