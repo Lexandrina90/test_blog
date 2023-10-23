@@ -20,7 +20,7 @@ export default {
     posts: {
       type: Array,
       required: true,
-    }
+    },
   }
 }
 </script>

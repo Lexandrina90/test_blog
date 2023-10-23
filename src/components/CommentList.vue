@@ -20,7 +20,7 @@ export default {
     comments: {
       type: Array,
       required: true,
-    }
+    },
   }
 }
 </script>

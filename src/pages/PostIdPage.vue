@@ -87,44 +87,61 @@ export default {
   },
   computed: {
     postDate() {
-        const savedDates = localStorage.getItem("datesMap");
-        const dates = JSON.parse(savedDates);
-        const postId = Number(this.$route.params.id);
-        const storedDate = dates[postId - 1];
-        if (storedDate) {
-          const date = new Date(storedDate);
-          const day = date.getDate();
-          const month = date.getMonth() + 1;
-          const year = date.getFullYear();
-          return `${day < 10 ? "0" : ""}${day}.${
-            month < 10 ? "0" : ""
-          }${month}.${year}`;
-        } else {
-          return "No date available";
-        }
+      const savedDates = localStorage.getItem("datesMap");
+      const dates = JSON.parse(savedDates);
+      const postId = Number(this.$route.params.id);
+      const storedDate = dates[postId];
+      if (storedDate) {
+        const date = new Date(storedDate);
+        const day = date.getDate();
+        const month = date.getMonth() + 1;
+        const year = date.getFullYear();
+        return `${day < 10 ? "0" : ""}${day}.${
+          month < 10 ? "0" : ""
+        }${month}.${year}`;
+      } else {
+        return "No date available";
+      }
     },
   },
 
   methods: {
     removeComment(comment) {
+      const postId = Number(this.$route.params.id);
+
+      const savedComments = JSON.parse(localStorage.getItem("comments")) || {};
+
+      const index = savedComments[postId].findIndex((c) => c.id === comment.id);
+      if (index !== -1) {
+        savedComments[postId].splice(index, 1);
+      }
+
+      localStorage.setItem("comments", JSON.stringify(savedComments));
+
       this.comments = this.comments.filter((c) => c.id !== comment.id);
     },
     createComment(comment) {
-      this.comments.push(comment);
+      const postId = Number(this.$route.params.id);
+
+      const savedComments = JSON.parse(localStorage.getItem("comments")) || {};
+
+      if (!savedComments[postId]) {
+        savedComments[postId] = [];
+      }
+      savedComments[postId].push(comment);
+
+      localStorage.setItem("comments", JSON.stringify(savedComments));
+      this.comments = savedComments[postId];
+
       this.dialogVisible = false;
     },
     showDialog() {
       this.dialogVisible = true;
     },
-    async fetchComments() {
-      try {
-        const response = await axios.get(
-          `https://jsonplaceholder.typicode.com/comments?postId=${this.post.id}&_limit=5`
-        );
-        this.comments = [...this.comments, ...response.data];
-      } catch (e) {
-        alert("Error");
-      }
+    fetchComments() {
+        const postId = Number(this.$route.params.id);
+        const savedComments = JSON.parse(localStorage.getItem("comments")) || {};
+        this.comments = savedComments[postId];
     },
     editPost() {
       this.isEdit = true;
@@ -146,17 +163,17 @@ export default {
     },
     saveAndExitEditMode() {
       this.isEdit = false;
-      
+
       if (this.isUpdate) {
-        const currentDate = new Date().toISOString().split('T')[0];
+        const currentDate = new Date().toISOString().split("T")[0];
         const savedDates = JSON.parse(localStorage.getItem("datesMap"));
         const postId = Number(this.$route.params.id);
-        savedDates[postId - 1] = currentDate;
+        savedDates[postId] = currentDate;
         localStorage.setItem("datesMap", JSON.stringify(savedDates));
 
-        this.isUpdate = false; 
+        this.isUpdate = false;
       }
-    }
+    },
   },
   mounted() {
     const savedPosts = localStorage.getItem("posts");

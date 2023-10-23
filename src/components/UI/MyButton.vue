@@ -17,5 +17,10 @@ export default {
   color: teal;
   border: 1px solid teal;
   border-radius: 4px;
+  cursor: pointer;
+}
+.btn:hover{
+  background-color: teal;
+  color: aliceblue;
 }
 </style>

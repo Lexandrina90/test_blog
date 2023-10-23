@@ -8,7 +8,6 @@
         <div><strong>Name:</strong> {{ comment.name }}</div>
         <div><strong>E-mail:</strong> {{ comment.email }}</div>
         <div style="margin-top: 10px;"> {{ comment.body }}</div>
-        <!-- <span class="comments__date">{{ formattedDate }}</span> -->
       </div>
     </div>
     <div class="comment__btns">
@@ -35,17 +34,6 @@ export default {
       
     };
   },
-  // computed: {
-  //   formattedDate() {
-  //     const date = new Date();
-  //     const day = date.getDate();
-  //     const month = date.getMonth() + 1;
-  //     const year = date.getFullYear();
-  //     return `${day < 10 ? "0" : ""}${day}.${
-  //       month < 10 ? "0" : ""
-  //     }${month}.${year}`;
-  //   },
-  // },
 };
 </script>
 
@@ -67,10 +55,7 @@ export default {
 .comment__img {
   margin-right: 10px;
 }
-/* .post__date {
-  color: teal;
-  margin-right: 8px;
-} */
+
 .comment__btns {
   display: flex;
 }

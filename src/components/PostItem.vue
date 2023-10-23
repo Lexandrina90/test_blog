@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="post"
-    @click="$router.push(`/posts/${post.id}`)"
-  >
+  <div class="post" @click="$router.push(`/posts/${post.id}`)">
     <div class="post__body">
       <div class="post__img">
         <icon-user />
@@ -12,10 +9,11 @@
         <div><strong>Description:</strong> {{ post.body }}</div>
         <div class="post__footer">
           <span class="post__date">
-            <icon-date/>
-            {{ displayedDate }}</span>
+            <icon-date />
+            {{ displayedDate }}</span
+          >
           <span class="post__comments" style="color: gray">
-            {{ comments }}
+            {{ commentsCount}}
             <icon-comment />
           </span>
         </div>
@@ -33,7 +31,7 @@
 import IconComment from "./icons/IconComment.vue";
 import IconDelete from "./icons/IconDelete.vue";
 import IconUser from "./icons/IconUser.vue";
-import IconDate from '@/components/icons/IconDate.vue';
+import IconDate from "@/components/icons/IconDate.vue";
 export default {
   components: { IconDelete, IconUser, IconComment, IconDate },
   props: {
@@ -44,36 +42,57 @@ export default {
   },
   data() {
     return {
-      comments: 0,
-      datesMap:[],
+      comments: [],
+      datesMap: [],
     };
   },
   computed: {
     displayedDate() {
       const postId = this.post.id;
       if (this.datesMap[postId]) {
-        return this.datesMap[postId];
+        const storedDate = this.datesMap[postId];
+        const parts = storedDate.split("-");
+        if (parts.length === 3) {
+          const [year, month, day] = parts;
+          return `${day}.${month}.${year}`;
+        }
       }
       return "";
     },
+    commentsCount() {
+    const postId = this.post.id;
+    const storedComments = localStorage.getItem('comments');
+    
+    if (storedComments) {
+      const comments = JSON.parse(storedComments);
+      const postComments = comments[postId] || [];
+      return postComments.length;
+    }
+    
+    return 0; 
+  },
   },
   methods: {
     saveDateToLocalStorage() {
-      const date = new Date();
-      const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
-      const datesMap = this.datesMap || [];
-      datesMap.push(formattedDate);
-      localStorage.setItem("datesMap", JSON.stringify(datesMap));
     },
   },
-  created() {
-    const storedDatesMap = localStorage.getItem("datesMap");
-    if (storedDatesMap) {
-      this.datesMap = JSON.parse(storedDatesMap);
+  mounted() {
+    const storedDates = localStorage.getItem("datesMap");
+    if (storedDates) {
+      try {
+        this.datesMap = JSON.parse(storedDates);
+      } catch (error) {
+        console.error("Error while parsing data from localStorage", error);
+      }
     }
-    this.saveDateToLocalStorage();
-  },
+    const postId = this.post.id;
+    if (!this.datesMap[postId]) {
+      const currentDate = new Date().toISOString().slice(0, 10);
+      this.datesMap[postId] = currentDate;
+      localStorage.setItem("datesMap", JSON.stringify(this.datesMap));
+    }
 
+  },
 };
 </script>
 

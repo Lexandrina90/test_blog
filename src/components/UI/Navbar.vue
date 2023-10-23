@@ -1,15 +1,17 @@
 <template>
   <div class="navbar">
-    <div @click="$router.push('/')" class="navbar__link">Home</div>
+    <div @click="$router.push('/')" class="navbar__link">
+      <icon-home/>
+    </div>
   </div>
 </template>
 
 <script>
 import router from '@/router/router';
-import MyButton from './MyButton.vue'
+import MyButton from './MyButton.vue';
+import IconHome from '../icons/IconHome.vue';
 export default {
-  components: { MyButton },
-  
+  components: { MyButton, IconHome },
 }
 </script>
 

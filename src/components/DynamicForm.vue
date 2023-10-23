@@ -21,7 +21,7 @@
       </Field>
       <ErrorMessage :name="name" class="error-msg"/>
     </div>
-    <button style="align-self: flex-end; margin-top: 15px">Add Comment</button>
+    <button style="align-self: flex-end; margin-top: 15px" class="add-btn">Add Comment</button>
   </Form>
 </template>
 <script>
@@ -89,5 +89,10 @@ button {
 }
 .error-msg {
   color: rgb(185, 51, 10);
+}
+.add-btn:hover{
+  background-color: teal;
+  color: aliceblue;
+  cursor: pointer;
 }
 </style>
